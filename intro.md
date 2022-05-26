@@ -8,6 +8,12 @@ Kubernetes runs and manages (or *orchestrates*) large-scale applications in cont
 - Scaling to meet demand.
 - Securing access.
 
+The main features of Kubernetes are:
+
+- **Container Orchestration** - manage containers at scale across multiple servers.
+- **Application Reliability** - create reliable, self-healing, and scalable applications.
+- **Automation** - automate the management of your container apps to increase efficiency and reduce errors.
+
 The two core concepts in Kubernetes are:
 
 - The **API**, which you use to *define* your applications.
@@ -29,7 +35,7 @@ However, if you're using a managed service such as Elastic Kubernetes Service (E
 
 ### Running Applications
 
-You define your apps in YAML files (*application manifests*) and send those files to the Kubernetes API, using a command-line tool. Kubernetes reviews your request in the YAML and compare it with what's already running in the cluster. Kubernetes then makes any changes necessary to achieve your *desired state*. This could include:
+You define your apps in YAML files (*application manifests*) and send those files to the Kubernetes API, using a command-line tool. Kubernetes reviews your request in the YAML and compares it with what's already running in the cluster. Kubernetes then makes any changes necessary to achieve your *desired state*. This could include:
 
 - Updating a configuration.
 - Removing containers.
@@ -39,7 +45,7 @@ To ensure high availability, containers are distributed across the cluster. Your
 
 It's your responsibility to define the structure of an application, but Kubernetes ensures it keeps running. If a node in your cluster goes offline and takes containers with it, Kubernetes leaps into action and starts replacement containers on other nodes. If an application container becomes unhealthy, Kubernetes can restart it. If a component is struggling with a heavy load, Kubernetes can start extra instances of that component in new containers.
 
-Kubernetes helps you build a scalable, portable, self-healing application.
+In short, Kubernetes helps you build a scalable, portable, self-healing applications.
 
 ### Storage
 
