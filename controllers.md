@@ -32,7 +32,7 @@ As a controller, the Deployment:
 
 ### Tracking Deployments with Labels
 
-Kubernetes uses labels to keep track of Deployments. These labels are simple key-value pairs and you can add them to your own data.
+Kubernetes uses *labels* to keep track of Deployments. These labels are simple key-value pairs and you can add them to your own data.
 
 For example, you might add a label to a Deployment with the name `release` and the value `20.04` to indicate this Deployment is from the 20.04 release cycle.
 
@@ -49,3 +49,21 @@ Resources can have labels applied at creation and then added, removed, or edited
 Controllers use a label selector to identify the resources they manage. This means controllers don't need to maintain a list of all the resources they manage. Instead, they can find matching resources at any time by querying the Kubernetes API.
 
 :warning: Be careful when editing labels for a resource - you could accidentally break the relationship between that resource and its controller.
+
+However, this can be a useful technique in debugging: removing a Pod from a controller so you can connect and investigate a problem. In the meantime, the controller starts a replacement, which means your app keeps running at the desired scale. 
+
+Also, you could force a Deployment to adopt a Pod if the labels match. If there are now surplus Pods, the Deployment uses deletion rules to remove one.
+
+### Viewing a Pod in a Deployment
+
+As with individual Pods, you can use `port forward` to view an app that's running as part of a Deployment. This time, the Deployment selects one of its Pods as the target:
+
+`kubectl port-forward deploy/hello-kiamol-2 8080:80`
+
+In the example above, you're not interacting with the Pod directly, rather with the Deployment that's managing it.
+
+### Key Points
+
+- Like containers, Pods are meant to be short-lived - that's why you need a Deployment to manage them.
+- Deployments communicated with the Kubernetes API to maintain your desired state.
+- Labels are used for tracking Deployments and filtering your Pods.
