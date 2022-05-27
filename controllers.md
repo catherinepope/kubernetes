@@ -48,7 +48,4 @@ Resources can have labels applied at creation and then added, removed, or edited
 
 Controllers use a label selector to identify the resources they manage. This means controllers don't need to maintain a list of all the resources they manage. Instead, they can find matching resources at any time by querying the Kubernetes API.
 
-```ad-warning
-Be careful when editing labels for a resource - you could accidentally break the relationship between that resource and its controller.
-
-```
+:warning: Be careful when editing labels for a resource - you could accidentally break the relationship between that resource and its controller.
