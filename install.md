@@ -1,3 +1,5 @@
-minikube
-Docker Desktop
-EKS, GKS
+- minikube
+- Docker Desktop
+- EKS, GKS
+
+- kubectl
