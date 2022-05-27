@@ -62,6 +62,33 @@ As with individual Pods, you can use `port forward` to view an app that's runnin
 
 In the example above, you're not interacting with the Pod directly, rather with the Deployment that's managing it.
 
+
+### Deleting Pods
+
+If you created a Pod with a Deployment, you can't delete it directly with kubectl. It's the Deployment's job to manage that resource, not you! 
+
+The following command will delete all your Pods:
+
+`kubectl delete pods --all`
+
+But, any created by controllers, such as a Deployment, will spring back into life - that's exactly what Kubernetes is designed to do.
+
+If you want to delete a resource that's managed by a controller, you must delete the controller instead. Removing a Deployment also deletes all its Pods.
+
+Use the following command to view your Deployments:
+
+`kubectl get deploy`
+
+Then delete them all:
+
+`kubectl delete deploy --all`
+
+Use the following command to see what's still running in your cluster:
+
+`kubectl get all`
+
+It should just be the Kubernetes service.
+
 ### Key Points
 
 - Like containers, Pods are meant to be short-lived - that's why you need a Deployment to manage them.
