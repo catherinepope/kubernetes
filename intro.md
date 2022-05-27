@@ -1,4 +1,4 @@
-## Overview
+# Overview
 
 Kubernetes runs and manages (or *orchestrates*) large-scale applications in containers. It's responsible for:
 
@@ -19,11 +19,11 @@ The two core concepts in Kubernetes are:
 - The **API**, which you use to *define* your applications.
 - The cluster, which *runs* your applications.
 
-### The Cluster
+## The Cluster
 
 A cluster is a set of individual servers that have all been configured to use a container runtime such as Docker. Kubernetes then joins these servers into a single logical unit, the *cluster*.
 
-### Nodes
+## Nodes
 
 The servers within the cluster are called **nodes**. Some nodes run the Kubernetes API, while other run application workloads. Regardless of their role, all nodes run containers.
 
@@ -33,7 +33,7 @@ As a cluster administrator, you can add nodes, take nodes offline for servicing,
 
 However, if you're using a managed service such as Elastic Kubernetes Service (EKS), you'll usually interact with the cluster as a single entity - you won't see the underlying nodes.
 
-### Running Applications
+## Running Applications
 
 You define your apps in YAML files (*application manifests*) and send those files to the Kubernetes API, using a command-line tool. Kubernetes reviews your request in the YAML and compares it with what's already running in the cluster. Kubernetes then makes any changes necessary to achieve your *desired state*. This could include:
 
@@ -47,7 +47,7 @@ It's your responsibility to define the structure of an application, but Kubernet
 
 In short, Kubernetes helps you build a scalable, portable, self-healing applications.
 
-### Storage
+## Storage
 
 The cluster includes a distributed database, where you can securely store:
 
@@ -58,7 +58,7 @@ Kubernetes delivers this stored data to your containers so you can apply the cor
 
 Kubernetes also provides storage that's physically stored on disks in the cluster node or on a shared storage systems. This means you can maintain *stateful* data outside of containers so it persists even if those containers are deleted or restarted. 
 
-### Kubernetes Resources and Objects
+## Kubernetes Resources and Objects
 
 Although Kubernetes runs containers, it wraps them in other objects (known as *resources*) to support scaling, rolling upgrades, and more complex deployment patterns. These resources include:
 
