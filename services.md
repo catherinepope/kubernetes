@@ -1,8 +1,8 @@
 # Connecting Pods with Services
 
-Most applications are distributed across multiple components, and you'd use a Pod for each component. In a typical microservice architecture, all those Pods need to communicated.
+Most applications are distributed across multiple components, and you'd use a Pod for each component. In a typical microservice architecture, all those Pods need to communicate.
 
-Kubernetes supports the standard networking protocols TCP and UDP. Both protocols use IP addressess to route traffic. However, Pods are ephemeral and IP addresses change when they are replaced. Kubernetes solves this problem with *Services*, a network address discovery mechanism.
+Kubernetes supports the standard networking protocols TCP and UDP. Both protocols use IP addresses to route traffic. However, Pods are ephemeral and IP addresses change when they are replaced. Kubernetes solves this problem with *Services*, a network address discovery mechanism.
 
 Services support:
 
@@ -58,7 +58,7 @@ spec:
 
 ## Routing External Traffic to Pods
 
-A *LoadBalancer* solves the problem of getting traffic to a Pod that might be running on a different node form the one that received the traffic.
+A *LoadBalancer* solves the problem of getting traffic to a Pod that might be running on a different node from the one that received the traffic.
 
 - A LoadBalancer Service integrates with an external load balancer, which sends traffic to the cluster.
 - The Service sends the traffic to a Pod, using the label-selector mechanism to identify a target Pod.
@@ -88,15 +88,15 @@ The following command obtains the app URL:
 
 There's another Service type you can use. The *NodePort* listens for network traffic coming into the cluster and directs it to a Pod. 
 
-NodePort Services don't require an external load balancer - every node in the cluster listens on the port specifie in the Service and sends traffic to the target port on the Pod.
+NodePort Services don't require an external load balancer - every node in the cluster listens on the port specified in the Service and sends traffic to the target port on the Pod.
 
-NodePort Services aren't as flexibile as LoadBalancer Services. Because you need a different port for each Service, your nodes need to be publicly accessible and you don't achieve load-balancing across a multinode cluster.
+NodePort Services aren't as flexible as LoadBalancer Services. Because you need a different port for each Service, your nodes need to be publicly accessible and you don't achieve load-balancing across a multinode cluster.
 
 :warning: You typically don't use NodePorts in production.
 
 ## Routing Traffic Outside Kubernetes
 
-Although you can run almost anything in Kubernetes, you'd probably want to run databases outside of your cluster. You can still using Kubernetes Services for domain name resolution to external components.
+Although you can run almost anything in Kubernetes, you'd probably want to run databases outside of your cluster. You can still use Kubernetes Services for domain name resolution to external components.
 
 *ExternalName Services* allow you to use local names in your application Pods. The DNS server in Kubernetes then resolves the local name to a fully qualified external name when the Pod makes a lookup request. It's like an alias from one domain to another.
 
@@ -124,7 +124,7 @@ All communication from Pods is routed by a network proxy called `kube-proxy`, an
 
 Every Kubernetes resource exists within a *namespace*, which is used for grouping resources. Namespaces provide a method of logically partitioning a Kubernetes cluster. For example, you could create namespaces for separate teams or products.
 
-Within a namespace, Services are availabl ueins a simple domain name, for example, `numbers-api`.
+Within a namespace, Services are available using a simple domain name, for example, `numbers-api`.
 
 Services are also accessible using a full qualified domain name, which includes the namespace of the service. Pods in other namespaces can access that Service with a name in the format of `numbers-api.default.svc.cluster.local`.
 
@@ -140,7 +140,7 @@ kubectl get svc -n kube-system
 
 ## Deleting Services
 
-Whereas deleting a Deployments also deletes all its Pods, there's no cascading delete for Services. They are independent objects that need to be removed separately.
+Whereas deleting a Deployment also deletes all its Pods, there's no cascading delete for Services. They are independent objects that need to be removed separately.
 
 To delete Deployments:
 
