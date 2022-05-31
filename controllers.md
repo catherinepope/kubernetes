@@ -89,6 +89,13 @@ Use the following command to see what's still running in your cluster:
 
 It should just be the Kubernetes service.
 
+The kubectl `delete` command can read a YAML file and delete the resources defined in thef ile. If you have multiple YAML files in a directory, you can use the directory name as the argument to `delete` (or `apply`) all the files therein:
+
+```
+kubectl delete -f todo-list/
+kubectl apply -f my-app/
+```
+
 ### Key Points
 
 - Like containers, Pods are meant to be short-lived - that's why you need a Deployment to manage them.

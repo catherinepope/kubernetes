@@ -101,7 +101,7 @@ kubectl create configmap sleep-config-env-file --from-env-file=
 sleep/ch04.env
 ```
 
-:warning: If there are duplicate keys, environment variables define with `env` in the Pod spec overide the values defined with `envFrom`. This means you can override any environment variables set in the container image or in ConfigMaps by setting them explicitly in the Pod spec - useful for debugging! 
+:warning: If there are duplicate keys, environment variables define with `env` in the Pod spec override the values defined with `envFrom`. This means you can override any environment variables set in the container image or in ConfigMaps by setting them explicitly in the Pod spec - useful for debugging! 
 
 ### Surfacing Configuration Data from ConfigMaps
 
@@ -151,7 +151,7 @@ In the example above:
 - The /app directory is loaded from the container image.
 - The /app/config directory is loaded from the ConfigMap.
 
-The ConfigMap is treated like a directory. It's multipe data items each become files in the container filesystem.
+The ConfigMap is treated like a directory. It's multiple data items each become files in the container filesystem.
 
 :warning: If the mount path for a volume already exists in the container image, then the ConfigMap directory overwrites it and replaces all the contents, you app might fail in exciting ways.
 
@@ -185,7 +185,7 @@ Secrets work similarly to ConfigMaps, but Kubernetes manages them differently - 
 
 -  Secrets are sent only to nodes that need to use them.
 -  Secrets are stored in memory, rather than on disk. 
--  Secrets can be encrypte both in transit and at rest.
+-  Secrets can be encrypted both in transit and at rest.
 
 The following command creates a Secret:
 
@@ -237,4 +237,52 @@ kubectl exec deploy/sleep -- printenv KIAMOL_SECRET
 Secrets and ConfigMaps can be mixed in the same Pod spec, populating environment variables or files, or both.
 
 :warning: You should avoid loading Secrets into environment variables. Environment variables can be read from any process in the Pod container and some application platforms log all environment variable values if they encounter a critical error. The alternative is to surface Secrets as files, if the application supports it, which gives you the option to secure access with file permissions.
+
+## Case Study
+
+In this case study, the to-do app uses a separate database to store items, running in its own Pod. The database runs in a Postgres-based container, which reads logon credentials from configuration values in the environment. 
+
+The following YAML spec creates the database password as a Secret:
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: todo-db-secret-test
+type: Opaque
+stringData:
+  POSTGRES_PASSWORD: "kiamol-2*2"
+```
+
+The password is encoded to Base64 when you create the Secret. However, the data is visible in source control. In a production environment, you would use placedholders instead and inject the data from a CircleCI or GitHub Secret.
+
+We can load the Secret into a file and tell Postgres where to find load it by setting the POSTGRES_PASSWORD_FILE environment variable. Using a file means we can control access perimssions at the volume level:
+
+```
+spec:
+  containers:
+    - name: db
+      image: postgres:11.6-alpine
+      env:
+      - name: POSTGRES_PASSWORD_FILE
+        value: /secrets/postgres_password
+      volumeMounts:
+        - name: secret
+          mountPath: "/secrets"
+  volumes:
+    - name: secret
+      secret:
+        secretName: todo-db-secret-test
+        defaultMode: 0400
+        items:
+        - key: POSTGRES_PASSWORD
+          path: postgres_password
+```
+When this Pod is deployed, Kubernetes loads the value of the Secret item into a file at the path `/secrets/postgres_password`. That file will be set with 0400 permissions, which means it can be read by the container, but not by another users.
+
+The environment variable is set for Postgres to load the password from that file (which the Postgres user has access to), so the database starts with credentials set from the Secret.
+
+Now when you add to-do items in the app, they are stored in the Postgres database. Storage is separated from the application runtime. If you delete the web Pod, its controller starts a replacement with the same configuration. The new Pod connects to the same database Pod, so all the data is still available (unless, presumably, the database Pod has restarted?).
+
+
 
