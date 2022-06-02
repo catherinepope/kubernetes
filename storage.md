@@ -165,3 +165,27 @@ spec:
 ```
 
 If you delete a Pod and the replacement uses the same PVC and the same PV, the original data will still be available.
+
+### Dynamic Volume Provisioning
+
+With dynamic provisioning, you create the PVC and the PV is created on demand by the cluster. Clusters can be configured with multiple storage classes that reflect the different volume capabilities available, in addition to a default storage class.
+
+PVCs can specify the name of the storage class they want. If they want to use the default class, they just omit the storage class field in the claim spec.
+
+You create storage classes as standard Kubernetes resources. In the spec, you define exactly how the storage class works with the following three fields:
+
+- **provisioner** - the component that creates PVs on demand. Different platforms have different provisioners. For example, the provisioner in the default AKS storage class integrates with Azure Files to create new file shares.
+- **reclaimPolicy** - defines what happens to the dynamically created volumes when the claim is deleted. The underlying volume can be deleted or retained.
+- **volumeBindingMode** - determines whether the PV is created as soon as the PV is created, or not until a Pod that *uses* the PVC is created.
+
+Here's an example of a PVC using a storage class:
+
+```
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: kiamol
+  resources:
+    requests:
+      storage: 100Mi
+```
